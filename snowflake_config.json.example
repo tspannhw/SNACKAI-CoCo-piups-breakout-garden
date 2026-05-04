@@ -1,0 +1,32 @@
+{
+    "snowflake": {
+        "account": "YOUR_ACCOUNT_LOCATOR",
+        "user": "YOUR_USERNAME",
+        "url": "https://YOUR_ACCOUNT.snowflakecomputing.com",
+        "pat": "",
+        "private_key_path": "~/.ssh/putsomekeyhere.p8",
+        "role": "ACCOUNTADMIN",
+        "database": "IOT_LAB",
+        "schema": "SENSORS",
+        "pipe": "BREAKOUT_GARDEN_PIPE",
+        "channel_name": "PIUPS_CHNL",
+        "warehouse": "INGEST"
+    },
+    "sensors": {
+        "read_interval_seconds": 5.0,
+        "batch_interval_seconds": 10.0,
+        "bh1745_enabled": true,
+        "ltr559_enabled": true,
+        "vl53l1x_enabled": true,
+        "bme680_enabled": true,
+        "lsm303d_enabled": true
+    },
+    "display": {
+        "oled_enabled": true,
+        "oled_address": "0x3C",
+        "oled_rotation": 2
+    },
+    "device_id": "piups-breakout-garden-01",
+    "slack_webhook": "",
+    "log_level": "INFO"
+}
