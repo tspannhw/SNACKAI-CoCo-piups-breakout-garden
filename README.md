@@ -2,6 +2,46 @@
 
 Production IoT data producer for Raspberry Pi (2GB) with Pimoroni Breakout Garden sensors streaming to Snowflake via Snowpipe Streaming v2 REST API.
 
+
+## Raw Data
+
+````
+{
+  "bh1745_blue": 23.4,
+  "bh1745_clear": 50,
+  "bh1745_green": 38,
+  "bh1745_red": 68.2,
+  "cpu_percent": 1.3,
+  "cpu_temp_c": 51.5,
+  "device_id": "piups-breakout-garden-01",
+  "disk_usage_percent": 89.4,
+  "gas_resistance_ohms": 105214,
+  "hostname": "piups",
+  "humidity_percent": 29.66,
+  "ip_address": "192.168.1.179",
+  "lsm303d_accel_x": -0.0194,
+  "lsm303d_accel_y": -1.0059,
+  "lsm303d_accel_z": 0.0183,
+  "lsm303d_mag_x": -0.28,
+  "lsm303d_mag_y": 0.36,
+  "lsm303d_mag_z": 0.32,
+  "ltr559_lux": 6.65,
+  "ltr559_proximity": 0,
+  "mac_address": "b8:27:eb:1f:1e:34",
+  "memory_percent": 21.2,
+  "pressure_hpa": 1007.33,
+  "raw_data": "{\"uuid\": \"f8a96d03-50c8-4233-8bb3-4a15e6142646\", \"device_id\": \"piups-breakout-garden-01\", \"hostname\": \"piups\", \"ip_address\": \"192.168.1.179\", \"mac_address\": \"b8:27:eb:1f:1e:34\", \"reading_ts\": \"2026-05-04T18:06:10.965861+00:00\", \"cpu_temp_c\": 51.5, \"cpu_percent\": 1.3, \"memory_percent\": 21.2, \"disk_usage_percent\": 89.4, \"bh1745_red\": 68.2, \"bh1745_green\": 38.0, \"bh1745_blue\": 23.4, \"bh1745_clear\": 50.0, \"ltr559_lux\": 6.65, \"ltr559_proximity\": 0, \"vl53l1x_distance_mm\": 304, \"temperature_c\": 30.69, \"humidity_percent\": 29.66, \"pressure_hpa\": 1007.33, \"gas_resistance_ohms\": 105214, \"lsm303d_accel_x\": -0.0194, \"lsm303d_accel_y\": -1.0059, \"lsm303d_accel_z\": 0.0183, \"lsm303d_mag_x\": -0.28, \"lsm303d_mag_y\": 0.36, \"lsm303d_mag_z\": 0.32}",
+  "reading_ts": "2026-05-04T18:06:10.965861+00:00",
+  "temperature_c": 30.69,
+  "uuid": "f8a96d03-50c8-4233-8bb3-4a15e6142646",
+  "vl53l1x_distance_mm": 304
+}
+
+````
+
+Example data - Tim Spann
+
+
 ## Sensors
 
 | Sensor | I2C Address | Measurements |
@@ -17,38 +57,38 @@ Production IoT data producer for Raspberry Pi (2GB) with Pimoroni Breakout Garde
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  Raspberry Pi (2GB RAM)                                          │
-│                                                                   │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐       │
-│  │  BH1745  │  │  LTR559  │  │  VL53L1X │  │  BME680  │       │
-│  │  Color   │  │  Light   │  │ Distance │  │ Weather  │       │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘       │
-│       │              │              │              │              │
-│       └──────────────┴──────────────┴──────────────┘              │
-│                          I2C Bus                                   │
-│                             │                                      │
-│  ┌──────────┐         ┌────┴────────┐         ┌──────────┐       │
-│  │  LSM303D │         │  app/main   │         │  SH1106  │       │
-│  │  Motion  │────────▶│ Orchestrator│────────▶│   OLED   │       │
-│  └──────────┘         └──────┬──────┘         └──────────┘       │
-│                              │                                     │
-│                    ┌─────────┴─────────┐                          │
-│                    │  Snowpipe Stream  │                          │
-│                    │  v2 REST Client   │                          │
-│                    └─────────┬─────────┘                          │
-└──────────────────────────────┼────────────────────────────────────┘
+│  Raspberry Pi (2GB RAM)                                         │
+│                                                                 │
+│  ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────┐      │
+│  │  BH1745  │   │  LTR559  │   │  VL53L1X │   │  BME680  │      │
+│  │  Color   │   │  Light   │   │ Distance │   │ Weather  │      │
+│  └────┬─────┘   └────┬─────┘   └────┬─────┘   └────┬─────┘      │
+│       │              │              │              │            │
+│       └──────────────┴──────────────┴──────────────┘            │
+│                          I2C Bus                                │
+│                             │                                   │
+│  ┌──────────┐         ┌────┴────────┐         ┌──────────┐      │
+│  │  LSM303D │         │  app/main   │         │  SH1106  │      │
+│  │  Motion  │────────▶│ Orchestrator│────────▶│   OLED   │      │
+│  └──────────┘         └──────┬──────┘         └──────────┘      │
+│                              │                                  │
+│                    ┌─────────┴─────────┐                        │
+│                    │  Snowpipe Stream  │                        │
+│                    │  v2 REST Client   │                        │
+│                    └─────────┬─────────┘                        │
+└──────────────────────────────┼──────────────────────────────────┘
                                │ HTTPS (JWT/PAT)
                                ▼
 ┌──────────────────────────────────────────────────────────────────┐
-│  Snowflake                                                        │
-│                                                                   │
+│  Snowflake                                                       │
+│                                                                  │
 │  IOT_LAB.SENSORS.BREAKOUT_GARDEN_DATA                            │
-│       │                                                           │
+│       │                                                          │
 │       ├── V_PIUPS_LATEST (real-time per-device)                  │
 │       ├── V_PIUPS_HOURLY (aggregates)                            │
 │       ├── V_PIUPS_ANOMALIES (rule-based detection)               │
 │       └── PIUPS_DATA_GAP_ALERT (5-min monitoring)                │
-│                                                                   │
+│                                                                  │
 │  Streamlit Dashboard (IOT_LAB.SENSORS.PIUPS_DASHBOARD)           │
 └──────────────────────────────────────────────────────────────────┘
 ```
